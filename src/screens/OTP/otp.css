@@ -1,0 +1,113 @@
+/* Container for the whole page */
+#forgetpassword {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full height of the viewport */
+  background-color: #f7f7f7;
+}
+
+/* Centering the form and giving a nice shadow */
+.login-container {
+  width: 100%;
+  max-width: 450px;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 8px;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+/* Styling for the heading of the form */
+.heading-form {
+  font-size: 24px;
+  font-weight: 600;
+  text-align: center;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Styling for the small description under heading */
+.text-para {
+  font-size: 14px;
+  text-align: center;
+  color: #666;
+}
+
+/* Styling the OTP container to make sure inputs are aligned */
+/* Styling the OTP input boxes */
+.otpinputStyle {
+  width: 60px; /* Increased width for better visibility */
+  height: 50px;
+  font-size: 20px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin: 5px;
+}
+
+
+/* Styling for the OTP container itself */
+.mt-1 {
+  display: flex;
+  justify-content: center;
+}
+
+/* Resend OTP link */
+.otp-resend {
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  color: #007bff;
+}
+
+/* Button styling for the footer and back-to-login */
+.login-footer-span {
+  color: #007bff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* General button styling */
+input, textarea, button {
+  padding: 8px 15px;
+  border-radius: 10px;
+  margin: 5px 7px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  font-size: 18px !important;
+  font-weight: 300;
+}
+
+/* Full container width styling */
+.full-sec {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* Add spacing between the OTP inputs and other elements */
+.field-heading {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+/* Verify OTP button styling */
+.verify-otp-btn {
+  background-color: #6f42c1 !important; /* Background color */
+  /* Text color */
+  color: white;
+  padding: 12px 20px; /* Padding for button */
+  border-radius: 8px; /* Rounded corners */
+  font-size: 16px; /* Font size */
+  width: 100%; /* Full width of the container */
+  cursor: pointer; /* Pointer cursor on hover */
+  border: none; /* Remove default border */
+  transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.verify-otp-btn:hover {
+  background-color: #5a2c9f; /* Darker shade on hover */
+}
