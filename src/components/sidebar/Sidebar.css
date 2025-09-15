@@ -1,0 +1,75 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  color: #1e1e1e;
+  position: fixed;
+  padding-top: 20px;
+  transition: all 0.3s;
+  border-right: 0.5px solid #d1d0d0;
+  background-color: #fff;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.medical-logo {
+  width: 20px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.sidebar-header h2 {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  color: #18546C;
+  margin: 0;
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-menu li {
+  padding: 10px 20px;
+}
+
+.sidebar-menu li a {
+  color: #1e1e1e;
+  text-decoration: none;
+  font-size: 1rem;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.sidebar-menu li a span {
+  margin-left: 10px; /* Space between icon and text */
+}
+
+.sidebar-icon {
+  width: 20px; /* Adjust based on your image size */
+  height: 20px; /* Adjust based on your image size */
+  filter: brightness(0); /* Default color to #1e1e1e (black) */
+  transition: filter 0.3s ease;
+}
+
+.sidebar-menu li a.active .sidebar-icon {
+  filter: brightness(0) invert(1); /* White color when active */
+}
+
+.sidebar-menu li a.active {
+  color: white;
+  background: #18546C;
+  border-radius: 5px;
+}

@@ -1,0 +1,176 @@
+.finance-status-container {
+  font-family: "Poppins", sans-serif;
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.summary-section {
+  display: flex;
+  justify-content: space-between;
+  border: 2px dashed #a3bffa;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #e6f0fa;
+  border-radius: 12px;
+}
+
+.summary-card {
+  flex: 1;
+  padding: 15px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin: 0 10px;
+}
+
+.summary-card:first-child {
+  margin-left: 0;
+}
+
+.summary-card:last-child {
+  margin-right: 0;
+}
+
+.summary-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.summary-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.summary-item span {
+  font-weight: 500;
+  color: #333;
+}
+
+.summary-item .total-icon {
+  color: #4a90e2;
+}
+
+.summary-item .received-icon {
+  color: #0d9b5c;
+}
+
+.summary-item .pending-icon {
+  color: #e6a700;
+}
+
+.summary-donut {
+  width: 120px;
+  height: 120px;
+  background: conic-gradient(#a3bffa 0% 60%, #e6e6fa 60% 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 auto;
+}
+
+.summary-chart {
+  width: 100%;
+  height: 150px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 150"><path d="M0 100 Q50 50 100 100 T200 50 T300 100 T400 50" stroke="rgba(0, 0, 128, 0.5)" stroke-width="2" fill="none"/><path d="M0 80 Q50 30 100 80 T200 30 T300 80 T400 30" stroke="rgba(0, 0, 128, 0.5)" stroke-width="2" fill="none"/><line x1="100" y1="0" x2="100" y2="150" stroke="rgba(128, 128, 128, 0.5)" stroke-width="1" stroke-dasharray="5"/><text x="90" y="10" font-size="12" fill="gray">200</text><text x="90" y="60" font-size="12" fill="gray">$500</text><text x="0" y="140" font-size="12" fill="gray">Jan</text><text x="50" y="140" font-size="12" fill="gray">Feb</text><text x="100" y="140" font-size="12" fill="gray">Mar</text><text x="150" y="140" font-size="12" fill="gray">Apr</text><text x="200" y="140" font-size="12" fill="gray">May</text><text x="250" y="140" font-size="12" fill="gray">Jun</text><text x="300" y="140" font-size="12" fill="gray">Jul</text><text x="350" y="140" font-size="12" fill="gray">Aug</text></svg>') no-repeat center;
+  background-size: contain;
+}
+
+.pending-payments-header {
+  background-color: #1e3a8a;
+  color: #fff;
+  padding: 15px;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  border-radius: 8px 8px 0 0;
+}
+
+/* Top Bar Styles */
+.top-bar {
+  display: none;
+}
+
+.search-container {
+  display: none;
+}
+
+.filter-group {
+  display: none;
+}
+
+.reset-btn {
+  display: none;
+}
+
+/* Table Styles */
+.table-container {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.data-table th {
+  background-color: #f8f9fa;
+  text-align: left;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4a5568;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+.data-table td {
+  font-size: 14px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eaeaea;
+  color: #4a5568;
+  background: #f9fbfd;
+}
+
+.data-table tr:hover {
+  background-color: #f0f7ff;
+}
+
+.remind-btn {
+  padding: 6px 14px;
+  background: #f0f7ff;
+  color: #4a90e2;
+  border: 1px solid #d0e3ff;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.remind-btn:hover {
+  background: #e1eeff;
+}
+
+@media (max-width: 768px) {
+  .summary-section {
+    flex-direction: column;
+  }
+
+  .summary-card {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+}
