@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import MEDICAL_IMAGES from "../../assets/images/logo.png";
 
+// Get API base URL from environment variable
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://127.0.0.1:4500";
+
 const Login = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -22,7 +25,7 @@ const Login = () => {
     console.log("Errors:", errors);
   }, [formData, errors]);
 
-  // Validation logic
+  // Validation logic for form inputs
   const validateField = (name, value) => {
     let error = "";
     switch (name) {
@@ -42,6 +45,7 @@ const Login = () => {
     return error;
   };
 
+  // Handle input changes and validate in real-time
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -55,6 +59,7 @@ const Login = () => {
     }));
   };
 
+  // Handle form submission with API call
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {
@@ -70,14 +75,39 @@ const Login = () => {
 
     setIsSubmitting(true);
     try {
-      // Simulate API call (replace with actual API endpoint)
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Mock delay
-      // Example API call: await fetch("/api/login", { method: "POST", body: JSON.stringify(formData) });
-      navigate("/dashboard/overview"); // Redirect to dashboard after successful login
+      const response = await fetch(`${API_BASE_URL}/api/v1/user/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+          role: "admin",
+          device: {
+            id: "8d8c1fc3197f3054",
+            deviceToken:
+              "fWp_51ntQUirNOKJWT4iS-:APA91bHV4lkMs8HIZc3F0pBe41L0C_26E1xLtJfC2PiRN3N7hVZMllYrao5WZPbscAKdjhMlbxf7zNcagMHouoR0JwbmGmh8IQPSp3T6TNHO8MQ9sZ1GDy2C_VNUrF2eoU0dIkRWA1VS",
+          },
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || "Login failed. Please try again.");
+      }
+
+      // Store the token and refresh token in localStorage for future authenticated requests
+      localStorage.setItem("authToken", data.data.token);
+      localStorage.setItem("refreshToken", data.data.refreshToken);
+
+      // Redirect to dashboard after successful login
+      navigate("/dashboard/overview");
     } catch (error) {
       setErrors((prev) => ({
         ...prev,
-        apiError: "Login failed. Please try again.",
+        apiError: error.message || "Login failed. Please try again.",
       }));
     } finally {
       setIsSubmitting(false);
@@ -156,19 +186,6 @@ const Login = () => {
               {errors.apiError}
             </span>
           )}
-
-          {/* <p className="login-link">
-            Forgot Password?{" "}
-            <a
-              href="/forgot-password"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate("/forgot-password");
-              }}
-            >
-              Click here
-            </a>
-          </p> */}
         </form>
       </div>
     </div>

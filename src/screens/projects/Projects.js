@@ -1,134 +1,228 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Projects.css";
 import EYE from "../../assets/icons/eye.png";
 
-const UserManagement = () => {
-  const [activeTab, setActiveTab] = useState("user");
+const Projects = () => {
   const [searchValue, setSearchValue] = useState("");
-  const [users] = useState([
-    {
-      id: "#1234",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#5678",
-      name: "Hatsoon",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#8971",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#5548",
-      name: "Hatsoon",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#0000",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#4482",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#4582",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#4852",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#4582",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#4582",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-    {
-      id: "#4882",
-      name: "Ahmad",
-      client: "John Smith",
-      dates: "12-07-2025",
-      status: "Active",
-      phase: "Designing",
-      budget: "$1200",
-    },
-  ]);
+  const [projects, setProjects] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState("add"); // "add" or "edit"
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [formData, setFormData] = useState({
+    name: "",
+    date: "",
+    status: "Active",
+    phase: "Designing",
+    budget: 0,
+    client: "",
+  });
+  const [errors, setErrors] = useState({});
 
-  const [permissions] = useState([
-    { id: "#001", name: "Dr. Sarah Khan", type: "Doctor", status: "Pending" },
-    { id: "#002", name: "Ali Raza", type: "Rider", status: "Pending" },
-    { id: "#003", name: "Dr. Faisal Ahmed", type: "Doctor", status: "Pending" },
-    { id: "#004", name: "Bilal Hassan", type: "Rider", status: "Pending" },
-    { id: "#005", name: "Dr. Zainab Malik", type: "Doctor", status: "Pending" },
-  ]);
+  // Get API base URL from environment variable or use localhost for development
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:4500";
 
-  const filteredUsers = users.filter((user) =>
-    Object.values(user).some((value) =>
-      value.toLowerCase().includes(searchValue.toLowerCase())
-    )
-  );
+  // Fetch projects and clients on component mount
+  useEffect(() => {
+    console.log("Component mounted, fetching projects and clients...");
+    fetchProjects();
+    fetchClients();
+  }, []);
 
-  const filteredPermissions = permissions.filter((permission) =>
-    Object.values(permission).some((value) =>
-      value.toLowerCase().includes(searchValue.toLowerCase())
+  const fetchProjects = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No auth token found");
+        setErrors({ apiError: "Authentication token missing" });
+        return;
+      }
+      console.log("Fetching projects from:", `${API_BASE_URL}/api/v1/project`);
+      const response = await fetch(`${API_BASE_URL}/api/v1/project`, {
+        method: "GET",
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (data.success && data.status === 200) {
+        setProjects(data.data.projects);
+        console.log("Projects fetched:", data.data.projects);
+      } else {
+        console.error("Failed to fetch projects:", data.message);
+        setErrors({ apiError: data.message || "Failed to fetch projects" });
+      }
+    } catch (error) {
+      console.error("Error fetching projects:", error);
+      setErrors({ apiError: "Error fetching projects. Please try again." });
+    }
+  };
+
+  const fetchClients = async () => {
+    try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No auth token found");
+        setErrors({ apiError: "Authentication token missing" });
+        return;
+      }
+      console.log("Fetching clients from:", `${API_BASE_URL}/api/v1/client`);
+      const response = await fetch(`${API_BASE_URL}/api/v1/client`, {
+        method: "GET",
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (data.success && data.status === 200) {
+        setClients(data.data.data);
+        console.log("Clients fetched:", data.data.data);
+      } else {
+        console.error("Failed to fetch clients:", data.message);
+        setErrors({ apiError: data.message || "Failed to fetch clients" });
+      }
+    } catch (error) {
+      console.error("Error fetching clients:", error);
+      setErrors({ apiError: "Error fetching clients. Please try again." });
+    }
+  };
+
+  // Validate form fields
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.date.trim()) newErrors.date = "Date is required";
+    if (formData.budget < 0) newErrors.budget = "Budget cannot be negative";
+    if (!formData.client) newErrors.client = "Client is required";
+    return newErrors;
+  };
+
+  // Handle form input changes
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  // Open modal for adding or editing
+  const openModal = (mode, project = null) => {
+    console.log("Button clicked, opening modal in", mode, "mode", project);
+    setModalMode(mode);
+    setSelectedProject(project);
+    setFormData(
+      project
+        ? { ...project, budget: parseInt(project.budget), client: project.client._id }
+        : {
+            name: "",
+            date: "",
+            status: "Active",
+            phase: "Designing",
+            budget: 0,
+            client: "",
+          }
+    );
+    setErrors({});
+    setModalOpen(true);
+  };
+
+  // Handle form submission for add/edit
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    const formErrors = validateForm();
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      setErrors({ apiError: "Authentication token missing" });
+      return;
+    }
+
+    const url =
+      modalMode === "add"
+        ? `${API_BASE_URL}/api/v1/project`
+        : `${API_BASE_URL}/api/v1/project/${selectedProject._id}`;
+    const method = modalMode === "add" ? "POST" : "PATCH";
+
+    try {
+      console.log(`Submitting ${modalMode} request to:`, url, formData);
+      const response = await fetch(url, {
+        method,
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...formData,
+          ...(modalMode === "edit" && { _id: selectedProject._id }),
+        }),
+      });
+      const data = await response.json();
+      if (data.success) {
+        setModalOpen(false);
+        fetchProjects(); // Refresh project list
+        console.log("Submission successful:", data);
+      } else {
+        setErrors({ apiError: data.message || "Operation failed. Please try again." });
+        console.error("API error:", data.message);
+      }
+    } catch (error) {
+      setErrors({ apiError: error.message || "Operation failed. Please try again." });
+      console.error("Error submitting form:", error);
+    }
+  };
+
+  // Handle delete project
+  const handleDelete = async (projectId) => {
+    if (!window.confirm("Are you sure you want to delete this project?")) return;
+
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No auth token found");
+      setErrors({ apiError: "Authentication token missing" });
+      return;
+    }
+
+    try {
+      console.log("Deleting project with ID:", projectId);
+      const response = await fetch(`${API_BASE_URL}/api/v1/project/${projectId}`, {
+        method: "DELETE",
+        headers: {
+          "Authorization": token,
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (data.success) {
+        fetchProjects(); // Refresh project list
+        console.log("Project deleted:", projectId);
+      } else {
+        console.error("Failed to delete project:", data.message);
+        setErrors({ apiError: data.message || "Failed to delete project" });
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+      setErrors({ apiError: "Error deleting project. Please try again." });
+    }
+  };
+
+  const filteredProjects = projects.filter((project) =>
+    Object.values(project).some((value) =>
+      value.toString().toLowerCase().includes(searchValue.toLowerCase())
     )
   );
 
   return (
     <div className="advanced-filter-container">
+      {/* Add New Project Button at Top-Right Corner */}
+      <button className="add-new-btn" onClick={() => openModal("add")} style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
+        Add New Project
+      </button>
+
       {/* Top Bar */}
       <div className="top-bar">
         <div className="search-container">
@@ -150,133 +244,164 @@ const UserManagement = () => {
             </svg>
             Status
           </button>
-          <button className="add-new-btn">Add New Project</button>
-        </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="tabs-container">
-        <div
-          className={`tab ${activeTab === "user" ? "active" : ""}`}
-          onClick={() => setActiveTab("user")}
-        >
-          User
-        </div>
-        <div
-          className={`tab ${activeTab === "permissions" ? "active" : ""}`}
-          onClick={() => setActiveTab("permissions")}
-        >
-          Permissions
         </div>
       </div>
 
       {/* Table */}
       <div className="table-container">
-        {activeTab === "user" ? (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Project Name</th>
-                <th>Client</th>
-                <th>Dates</th>
-                <th>Status</th>
-                <th>Phase</th>
-                <th>Budget</th>
-                <th>View</th>
+        <table className="data-table">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Client</th>
+              <th>Dates</th>
+              <th>Status</th>
+              <th>Phase</th>
+              <th>Budget</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredProjects.map((project) => (
+              <tr key={project._id}>
+                <td>{project.name}</td>
+                <td>{project.client.name}</td>
+                <td>{project.date}</td>
+                <td>
+                  <span
+                    className={`status-badge ${
+                      project.status === "Active" ? "completed" : ""
+                    }`}
+                  >
+                    {project.status}
+                  </span>
+                </td>
+                <td>{project.phase}</td>
+                <td>{`$${project.budget}`}</td>
+                <td>
+                  <button
+                    className="view-btn"
+                    onClick={() => openModal("edit", project)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(project._id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {filteredUsers.map((user, index) => (
-                <tr key={index}>
-                  <td>{user.id}</td>
-                  <td>{user.client}</td>
-                  <td>{user.dates}</td>
-                  <td>
-                    <span
-                      className={`status-badge ${
-                        user.status === "Active" ? "completed" : ""
-                      }`}
-                    >
-                      {user.status}
-                    </span>
-                  </td>
-                  <td>{user.phase}</td>
-                  <td>{user.budget}</td>
-                  <td>
-                    <button className="view-btn">View Detail</button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>
-                  <input type="checkbox" />
-                </th>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Phone Number</th>
-                <th>Email Address</th>
-                <th>Role</th>
-                <th>View</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredPermissions.map((permission, index) => (
-                <tr key={index}>
-                  <td>
-                    <input type="checkbox" />
-                  </td>
-                  <td>{permission.id}</td>
-                  <td>{permission.name}</td>
-                  <td>21 Mach 2025</td>
-                  <td>+921234567889</td>
-                  <td>Abc@gmail.com</td>
-                  <td>
-                    <span
-                      className={`${
-                        permission.type === "Doctor"
-                          ? "status-badge doctor"
-                          : "status-badge rider"
-                      }`}
-                    >
-                      {permission.type}
-                    </span>
-                  </td>
-                  <td>
-                    <button className="eye-btn">
-                      <img
-                        src={EYE}
-                        style={{ width: "20px", height: "20px" }}
-                      />
-                    </button>
-                  </td>
-
-                  <td className="actions">
-                    <button className="approve-btn">
-                      <svg viewBox="0 0 24 24">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
-                      </svg>
-                    </button>
-                    <button className="reject-btn">
-                      <svg viewBox="0 0 24 24">
-                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+            ))}
+          </tbody>
+        </table>
       </div>
+
+      {/* Error Display */}
+      {errors.apiError && (
+        <div className="error-container">
+          <span className="error">{errors.apiError}</span>
+        </div>
+      )}
+
+      {/* Modal for Add/Edit Project */}
+      {modalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h2>{modalMode === "add" ? "Add New Project" : "Edit Project"}</h2>
+            <form onSubmit={handleFormSubmit}>
+              <div className="form-group">
+                <label htmlFor="name">Name:</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleFormChange}
+                  placeholder="Enter project name"
+                />
+                {errors.name && <span className="error">{errors.name}</span>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="date">Date:</label>
+                <input
+                  type="text"
+                  id="date"
+                  name="date"
+                  value={formData.date}
+                  onChange={handleFormChange}
+                  placeholder="Enter date (e.g., 12-3-2025)"
+                />
+                {errors.date && <span className="error">{errors.date}</span>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="status">Status:</label>
+                <select
+                  id="status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleFormChange}
+                >
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="phase">Phase:</label>
+                <select
+                  id="phase"
+                  name="phase"
+                  value={formData.phase}
+                  onChange={handleFormChange}
+                >
+                  <option value="Designing">Designing</option>
+                  <option value="Development">Development</option>
+                  <option value="Testing">Testing</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="budget">Budget:</label>
+                <input
+                  type="number"
+                  id="budget"
+                  name="budget"
+                  value={formData.budget}
+                  onChange={handleFormChange}
+                  placeholder="Enter budget"
+                />
+                {errors.budget && <span className="error">{errors.budget}</span>}
+              </div>
+              <div className="form-group">
+                <label htmlFor="client">Client:</label>
+                <select
+                  id="client"
+                  name="client"
+                  value={formData.client}
+                  onChange={handleFormChange}
+                >
+                  <option value="">Select a client</option>
+                  {clients.map((client) => (
+                    <option key={client._id} value={client._id}>
+                      {client.name}
+                    </option>
+                  ))}
+                </select>
+                {errors.client && <span className="error">{errors.client}</span>}
+              </div>
+              {errors.apiError && <span className="error">{errors.apiError}</span>}
+              <div className="modal-buttons">
+                <button type="button" onClick={() => setModalOpen(false)}>
+                  Cancel
+                </button>
+                <button type="submit">{modalMode === "add" ? "Add Project" : "Save Changes"}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default UserManagement;
+export default Projects;

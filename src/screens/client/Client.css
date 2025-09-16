@@ -1,28 +1,24 @@
 .client-list-container {
   font-family: "Poppins", sans-serif;
-  max-width: 1200px;
-  margin: 20px auto;
+  margin: 20px;
   padding: 20px;
+  position: relative; /* For absolute positioning of button */
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Top Bar Styles */
-.top-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid #eaeaea;
+.content-wrapper {
+  margin-top: 60px; /* Space for the button */
 }
 
+/* Search Container */
 .search-container {
   position: relative;
   display: flex;
   align-items: center;
   width: 300px;
+  margin-bottom: 20px;
 }
 
 .search-icon {
@@ -49,35 +45,7 @@
   background: #fff;
 }
 
-.button-group {
-  display: flex;
-  gap: 12px;
-}
-
-.sort-btn,
-.advanced-filter-btn {
-  padding: 10px 18px;
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 1px solid #e0e0e0;
-  background: #ebedf0;
-  color: #000;
-}
-
-.sort-btn:hover,
-.advanced-filter-btn:hover {
-  background: #d0d0d0;
-}
-
-.advanced-filter-btn {
-  background: #ebedf0;
-  color: #000;
-  border: 1px solid #e0e0e0;
-}
-
+/* Add New Client Button */
 .add-new-btn {
   background: #1da1f2;
   color: #fff;
@@ -88,6 +56,8 @@
   border: none;
   cursor: pointer;
   transition: all 0.2s;
+  display: inline-block !important; /* Ensure button is displayed */
+  visibility: visible !important; /* Override any hidden styles */
 }
 
 .add-new-btn:hover {
@@ -140,40 +110,172 @@
   object-fit: cover;
 }
 
-.view-btn {
+.view-btn,
+.delete-btn {
   padding: 6px 14px;
-  background: #f0f7ff;
-  color: #4a90e2;
-  border: 1px solid #d0e3ff;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
   transition: all 0.2s;
+  margin-right: 8px;
+}
+
+.view-btn {
+  background: #f0f7ff;
+  color: #4a90e2;
+  border: 1px solid #d0e3ff;
 }
 
 .view-btn:hover {
   background: #e1eeff;
 }
 
-@media (max-width: 768px) {
-  .top-bar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 15px;
-  }
+.delete-btn {
+  background: #fff1f0;
+  color: #f44336;
+  border: 1px solid #ffccc7;
+}
 
+.delete-btn:hover {
+  background: #ffccc7;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.status-badge.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-badge.blocked {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 24px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.form-group .error {
+  color: #f44336;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modal-buttons button {
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.modal-buttons button:first-child {
+  background: #ebedf0;
+  color: #000;
+  border: 1px solid #e0e0e0;
+}
+
+.modal-buttons button:first-child:hover {
+  background: #d0d0d0;
+}
+
+.modal-buttons button:last-child {
+  background: #1da1f2;
+  color: #fff;
+  border: none;
+}
+
+.modal-buttons button:last-child:hover {
+  background: #1a91da;
+}
+
+/* Error Container */
+.error-container {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.error-container .error {
+  color: #f44336;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
   .search-container {
     width: 100%;
   }
 
-  .button-group {
-    width: 100%;
-    justify-content: space-between;
-  }
-
-  .sort-btn,
-  .advanced-filter-btn {
-    flex: 1;
-    justify-content: center;
+  .content-wrapper {
+    margin-top: 80px; /* More space for button on mobile */
   }
 }
